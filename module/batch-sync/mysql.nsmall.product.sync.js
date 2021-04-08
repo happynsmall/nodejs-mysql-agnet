@@ -8,15 +8,17 @@ const main = {
     },
     update(connection, data) {
         // todo : 쿼리 수정해야 함
-        var query = "update tb_user set user_nm = ? where user_id = ?";
+        var query = "update md_goods_bas set GOODS_NM = ?, GOODS_IMG = ?, GOODS_PRICE = ? where GOODS_CD = ?";
 
         // todo : 데이타 객체 수정해야함 
-        var userNm = data.user_nm;
-        var userId = data.user_id;
+        var goodsNm = data.GOODS_NM;
+        var goodsCd = data.GOODS_CD;
+        var goodsImg = data.GOODS_IMG;
+        var goodsPrice = data.GOODS_PRICE;
 
         // todo : 쿼리 매핑 수정해야함, 순서 주의.
-        connection.query(query, [userNm, userId], (error, rows) => {
-            console.log("업데이트 성공 : " + userId);
+        connection.query(query, [goodsNm,goodsImg, goodsPrice, goodsCd,], (error, rows) => {
+            console.log("업데이트 성공 : " + goodsCd);
             if (error) throw error;
 
             if (rows.affectedRows === 0) {
@@ -30,14 +32,16 @@ const main = {
     insert(connection, data) {
         console.log("insert function ");
         // todo : 쿼리 수정해야 함
-        var query = "  insert tb_user (user_id, user_nm) values (?, ?); ";
+        var query = "  insert md_goods_bas (GOODS_CD, GOODS_NM, GOODS_IMG, GOODS_PRICE) values (?, ?, ?, ?); ";
         // todo : 객체 수정해야 함
-        var userNm = data.user_nm;
-        var userId = data.user_id;
+        var goodsNm = data.GOODS_NM;
+        var goodsCd = data.GOODS_CD;
+        var goodsImg = data.GOODS_IMG;
+        var goodsPrice = data.GOODS_PRICE;
 
         // todo : 쿼리 매핑 수정해야함, 순서 주의.
-        connection.query(query, [userId, userNm], (error, rows) => {
-            console.log("인서트 성공 : " + userId);
+        connection.query(query, [goodsCd, goodsNm, goodsImg, goodsPrice], (error, rows) => {
+            console.log("인서트 성공 : " + goodsCd);
             if (error) throw error;
             console.log('result count is: ', rows.affectedRows);
 
