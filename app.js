@@ -9,17 +9,25 @@ const dotenv = require("dotenv"); // environment setup
 const cors = require('cors'); // CORS
 const cron = require('node-cron'); // Cron
 
+const mysql = require('mysql');
+
 // custom
 // const verify = require('./auth/verify-token'); // token  검사 
 
 /****************************************************************************************************
- *  [Import Route Modules]
+ *  [Import Modules]
  ****************************************************************************************************/
+// Route module
 // const authRouter = require("./routes/auth"); // add a auth
 // const bbsRouter = require('./routes/bbs'); // bbs api
 const userRouter = require('./routes/user'); // user api
 
+// common module
+const kafkaConsumerApi = require('./batch/kafka.consumer.api'); // batch job
+const mysqlJob = require('./batch/mysql.tbuser.job'); // batch job
 
+// db config
+const dbconfig = require('./config/mysql.js');
 
 /****************************************************************************************************
  *  [Use Common Modules]
@@ -57,16 +65,75 @@ dotenv.config();
 
 // mysql
 
+const connection = mysql.createConnection(dbconfig);
+
+
+
 
 
 /****************************************************************************************************
  *  [ Cron Job]
  ****************************************************************************************************/
-cron.schedule('*/5 * * * * *', function () {
-    console.log('node-cron 실행 테스트');
+cron.schedule('*/10 * * * * *', function () {
+    console.log('Sync Job Start -------');
+
+
+    var retData = kafkaConsumerApi.main.doStart(function (retData) {
+        if (retData.length > 0) {
+            retData.forEach((data) => {
+                console.log(data.value.id);
+                // // data insert 
+                mysqlJob.main.doStart(connection, data.value);
+            });
+
+        } else {
+            console.log('연게 데이터가 없습니다.');
+        }
+    });
+    console.log(retData);
+
+    // var retData = [
+    //     {
+    //         topic: 'k8s-connect-tb_user',
+    //         key: null,
+    //         value: {
+    //             id: 4,
+    //             user_id: 'dd',
+    //             user_nm: 'test',
+    //             addr: null,
+    //             cell_phone: null,
+    //             agree_info: null,
+    //             birth_dt: null,
+    //             updated: 1617609851000
+    //         },
+    //         partition: 0,
+    //         offset: 0
+    //     },
+    //     {
+    //         topic: 'k8s-connect-tb_user',
+    //         key: null,
+    //         value: {
+    //             id: 5,
+    //             user_id: 'jhchoi',
+    //             user_nm: 'choi',
+    //             addr: 'test',
+    //             cell_phone: null,
+    //             agree_info: 'aa',
+    //             birth_dt: '20200101',
+    //             updated: 1617609851000
+    //         },
+    //         partition: 0,
+    //         offset: 1
+    //     }
+    // ];
+
+
+
+
 });
 
 
+//kafkaConsumerApi.main.doStart();
 
 /****************************************************************************************************
  *  [ Server Port & Start ]

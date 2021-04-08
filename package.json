@@ -23,6 +23,7 @@
       "resolved": "https://registry.npmjs.org/array-flatten/-/array-flatten-1.1.1.tgz",
       "version": "1.1.1"
     },
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "bignumber.js": {
       "integrity": "sha512-t/OYhhJ2SD+YGBQcjY8GzzDHEk9f3nerxjtfa6tlMXfe7frs/WozhvCNoGvpM0P3bNf3Gq5ZRMlGr5f3r4/N8A==",
@@ -156,6 +157,7 @@
       "resolved": "https://registry.npmjs.org/http-errors/-/http-errors-1.7.2.tgz",
       "version": "1.7.2"
     },
+    "https": "^1.0.0",
     "iconv-lite": {
       "integrity": "sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==",
       "requires": {
