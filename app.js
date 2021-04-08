@@ -23,11 +23,10 @@ const mysql = require('mysql');
 const userRouter = require('./routes/user'); // user api
 
 // common module
-const kafkaConsumerApi = require('./batch/kafka.consumer.api'); // batch job
-const mysqlJob = require('./batch/mysql.tbuser.job'); // batch job
+const batchJob = require('./module/batch-job/batch.job')    // batch job
 
 // db config
-const dbconfig = require('./config/mysql.js');
+const nsmallDbConfig = require('./config/mysql.nsmall.db.js');
 
 /****************************************************************************************************
  *  [Use Common Modules]
@@ -65,7 +64,7 @@ dotenv.config();
 
 // mysql
 
-const connection = mysql.createConnection(dbconfig);
+const nsmallMysqlConn = mysql.createConnection(nsmallDbConfig);
 
 
 
@@ -74,61 +73,17 @@ const connection = mysql.createConnection(dbconfig);
 /****************************************************************************************************
  *  [ Cron Job]
  ****************************************************************************************************/
+// tb_user 동기화 배치잡
+//  cron.schedule('*/10 * * * * *', function () {
+//     console.log('tbuser Sync Job Start -------');
+//     batchJob.main.doNsmallTbuserSync(nsmallMysqlConn);
+
+// });
+
+// todo : product 동기화 배치잡
 cron.schedule('*/10 * * * * *', function () {
-    console.log('Sync Job Start -------');
-
-
-    var retData = kafkaConsumerApi.main.doStart(function (retData) {
-        if (retData.length > 0) {
-            retData.forEach((data) => {
-                console.log(data.value.id);
-                // // data insert 
-                mysqlJob.main.doStart(connection, data.value);
-            });
-
-        } else {
-            console.log('연게 데이터가 없습니다.');
-        }
-    });
-    console.log(retData);
-
-    // var retData = [
-    //     {
-    //         topic: 'k8s-connect-tb_user',
-    //         key: null,
-    //         value: {
-    //             id: 4,
-    //             user_id: 'dd',
-    //             user_nm: 'test',
-    //             addr: null,
-    //             cell_phone: null,
-    //             agree_info: null,
-    //             birth_dt: null,
-    //             updated: 1617609851000
-    //         },
-    //         partition: 0,
-    //         offset: 0
-    //     },
-    //     {
-    //         topic: 'k8s-connect-tb_user',
-    //         key: null,
-    //         value: {
-    //             id: 5,
-    //             user_id: 'jhchoi',
-    //             user_nm: 'choi',
-    //             addr: 'test',
-    //             cell_phone: null,
-    //             agree_info: 'aa',
-    //             birth_dt: '20200101',
-    //             updated: 1617609851000
-    //         },
-    //         partition: 0,
-    //         offset: 1
-    //     }
-    // ];
-
-
-
+    console.log('Nsmall product Sync Job Start -------');
+    batchJob.main.doNsmallProductSync(nsmallMysqlConn);
 
 });
 
