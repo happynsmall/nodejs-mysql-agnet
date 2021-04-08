@@ -14,14 +14,24 @@ mariadb가 소스데이터로 데이터가 추가 또는 변경될 때 kafka con
 # 초기화 
 ## software installation
 node로 개발하기 위해 필요한 프로그램 목록
-- npm
-- node
+- window(heidisql), mac(dbeaver)
+- node.js
 
 ## npm 초기화 
 npm install
 
 ## DB Script 작성
+```
+CREATE TABLE `md_goods_bas` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `GOODS_CD` varchar(100) DEFAULT '10000000' NOT NULL ,
+  `GOODS_NM` varchar(100)  NOT NULL,
+  `GOODS_PRICE` varchar(100)  NOT NULL,
+  `GOODS_IMG` varchar(100)  NOT NULL,
+  `updated` timestamp default CURRENT_TIMESTAMP NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `idx_goods` (`updated`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+```
 
-charmnamu 
 
-pak b c
