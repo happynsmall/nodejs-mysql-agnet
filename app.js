@@ -20,7 +20,7 @@ const mysql = require('mysql');
 // Route module
 // const authRouter = require("./routes/auth"); // add a auth
 // const bbsRouter = require('./routes/bbs'); // bbs api
-const userRouter = require('./routes/user'); // user api
+// const userRouter = require('./routes/user'); // user api
 
 // common module
 const batchJob = require('./module/batch-job/batch.job')    // batch job
@@ -31,8 +31,8 @@ const nsmallDbConfig = require('./config/mysql.nsmall.db.js');
 /****************************************************************************************************
  *  [Use Common Modules]
  ****************************************************************************************************/
-app.use(express.json()); // body 를  json으로 변경 
-app.use(cors());  // CORS 허용하기 
+// app.use(express.json()); // body 를  json으로 변경 
+// app.use(cors());  // CORS 허용하기 
 
 
 /****************************************************************************************************
@@ -41,14 +41,14 @@ app.use(cors());  // CORS 허용하기
 
 // app.use("/api/auth", authRouter);  // prefix, /api/user/***  <- router에 정의된 resource 주소를 subfix로 함 
 // app.use("/api/bbs", bbsRouter);  // bbs api
-app.use("/api/users", userRouter);  // bbs api
+// app.use("/api/users", userRouter);  // bbs api
 
 
 /****************************************************************************************************
  *  [초기화 작업]
  ****************************************************************************************************/
-// 초기 환경 세팅 
-dotenv.config();
+// 초기 환경 세팅 , mongodb
+// dotenv.config();
 
 // DB Connecting
 // mongoose.connect(
@@ -63,7 +63,6 @@ dotenv.config();
 // );
 
 // mysql
-
 const nsmallMysqlConn = mysql.createConnection(nsmallDbConfig);
 
 
@@ -74,7 +73,7 @@ const nsmallMysqlConn = mysql.createConnection(nsmallDbConfig);
  *  [ Cron Job]
  ****************************************************************************************************/
 // tb_user 동기화 배치잡
-//  cron.schedule('*/10 * * * * *', function () {
+// cron.schedule('*/10 * * * * *', function () {
 //     console.log('tbuser Sync Job Start -------');
 //     batchJob.main.doNsmallTbuserSync(nsmallMysqlConn);
 
@@ -83,8 +82,7 @@ const nsmallMysqlConn = mysql.createConnection(nsmallDbConfig);
 // todo : product 동기화 배치잡
 cron.schedule('*/10 * * * * *', function () {
     console.log('Nsmall product Sync Job Start -------');
-    batchJob.main.doNsmallProductSync(nsmallMysqlConn);
-
+    batchJob.main.doNsmallProductJobSync(nsmallMysqlConn);
 });
 
 

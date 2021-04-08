@@ -1,37 +1,55 @@
-const kafkaTbuserConsumerApi = require('../kafka/kafka.tbuser.consumer.api'); // tb_user consumer api
-const kafkaProductConsumerApi = require('../kafka/kafka.product.consumer.api'); // tb_product consumer api
-const nsmallTbuser = require('../batch-sync/mysql.nsmall.tbuser.sync'); // tb-user batch sync
-const nsmallProduct = require('../batch-sync/mysql.nsmall.product.sync'); // product batch sync
+const kafkaConsumerApi = require('../kafka/kafka.consumer.api'); // kafka consumer api
+const nsmallTbuserJob = require('../batch-sync/mysql.nsmall.tbuser.sync'); // tb-user batch sync
+const nsmallProductJob = require('../batch-sync/mysql.nsmall.product.sync'); // product batch sync
 
 
 /****************************************************************************
  * batch job
 *****************************************************************************/
 const main = {
+    consumer: {
+        url: "http://169.56.84.35:30432/consumers/",
+    },
     /*----------------------------------------------------------------------------
      *  JOB : tb_user table  동기화 
      *----------------------------------------------------------------------------*/
-    doNsmallTbuserSync(connection) {
-        var retData = kafkaTbuserConsumerApi.main.doStart(function (retData) {
+    doNsmallTbuserJobSync(connection) {
+
+        // consumer 정보 정의 
+        //-------------------------------------------------------------------------
+        this.consumer.group = "tb-user_consumer-02";
+        this.consumer.instance = "tb-user_consumer-02_instance";
+        this.consumer.topic = "k8s-connect-tb_user";
+        //-------------------------------------------------------------------------
+
+        var retData = kafkaConsumerApi.main.doStart(function (retData) {
             if (retData.length > 0) {
                 retData.forEach((data) => {
                     console.log(data.value.id);
                     // // data insert 
-                    nsmallTbuser.main.doStart(connection, data.value);
+                    nsmallTbuserJob.main.doStart(connection, data.value);
                 });
 
             } else {
                 console.log('연게 데이터가 없습니다.');
             }
-        });
+        }, this.consumer);
         console.log(retData);
 
     },
     /*----------------------------------------------------------------------------
      *  JOB : product table 동기화 
      *----------------------------------------------------------------------------*/
-    doNsmallProductSync(connection) {
-        var retData = kafkaProductConsumerApi.main.doStart(function (retData) {
+    doNsmallProductJobSync(connection) {
+
+        // consumer 정보 정의 
+        //-------------------------------------------------------------------------
+        this.consumer.group = "tb-product_consumer-02";
+        this.consumer.instance = "tb-product_consumer-02_instance";
+        this.consumer.topic = "k8s-connect-user05-tb-product";
+        //-------------------------------------------------------------------------
+
+        var retData = kafkaConsumerApi.main.doStart(function (retData) {
             // todo : 개발시 아래 항목을 주석 해제하고 작업할 것
             // var retData = [
             //     {
@@ -71,13 +89,13 @@ const main = {
                 retData.forEach((data) => {
                     console.log(data.value.id);
                     // // data insert 
-                    nsmallProduct.main.doStart(connection, data.value);
+                    nsmallProductJob.main.doStart(connection, data.value);
                 });
 
             } else {
                 console.log('연게 데이터가 없습니다.');
             }
-        });
+        }, this.consumer);
         console.log(retData);
 
 

@@ -4,16 +4,24 @@ const axios = require('axios');
  *  [ kafka consumer manage api]
  ****************************************************************************************************/
 const main = {
-    doStart(callback) {
+
+    doStart(callback, consumer) {
+        this.consumer.url = consumer.url;
+        this.consumer.group = consumer.group;
+        this.consumer.instance = consumer.instance;
+        this.consumer.topic = consumer.topic;
+
+        console.log(this.consumer);
+
         this.callApi(callback);
     },
-
-    consumer: {
-        url: "http://169.56.84.35:30432/consumers/",
-        group: "tb-user_consumer-02",
-        instance: "tb-user_consumer-02_instance",
-        topic: "k8s-connect-tb_user"
-    },
+    consumer: {},
+    // consumer: {
+    //     url: "http://169.56.84.35:30432/consumers/",
+    //     group: "tb-user_consumer-02",
+    //     instance: "tb-user_consumer-02_instance",
+    //     topic: "k8s-connect-tb_user"
+    // },
     callApi(callback) {
         var url = main.consumer.url + main.consumer.group + "/instances/" + main.consumer.instance + "/records ";
         console.log("Get data from kafka consumer groups Start .....");
