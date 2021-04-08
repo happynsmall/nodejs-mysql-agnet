@@ -21,4 +21,4 @@ node로 개발하기 위해 필요한 프로그램 목록
 npm install
 
 ## DB Script 작성
-test
+charmnamu 
