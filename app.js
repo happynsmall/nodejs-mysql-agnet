@@ -73,17 +73,16 @@ const nsmallMysqlConn = mysql.createConnection(nsmallDbConfig);
  *  [ Cron Job]
  ****************************************************************************************************/
 // tb_user 동기화 배치잡
-// cron.schedule('*/10 * * * * *', function () {
-//     console.log('tbuser Sync Job Start -------');
-//     batchJob.main.doNsmallTbuserSync(nsmallMysqlConn);
-
-// });
+cron.schedule('*/10 * * * * *', function () {
+    console.log('tbuser Sync Job Start -------');
+    batchJob.main.doNsmallTbuserJobSync(nsmallMysqlConn);
+});
 
 // todo : product 동기화 배치잡
-cron.schedule('*/10 * * * * *', function () {
-    console.log('Nsmall product Sync Job Start -------');
-    batchJob.main.doNsmallProductJobSync(nsmallMysqlConn);
-});
+// cron.schedule('*/10 * * * * *', function () {
+//     console.log('Nsmall product Sync Job Start -------');
+//     batchJob.main.doNsmallProductJobSync(nsmallMysqlConn);
+// });
 
 
 //kafkaConsumerApi.main.doStart();
