@@ -1,6 +1,6 @@
 # 개요
 kafka connector 를 이용하여 CQRS 패턴을 구현하기 위한 배치 에이전트 모듈이다.
-mariadb가 소스데이터로 데이터가 추가 또는 변경될 때 kafka connector가 변경된 데이터를 인지하여 kafka topic으로 전달한다. 이를 subscribe 하여 타겟 서버로 넣기 위한 자동 배치 모듈이다.   
+mariadb를 소스데이터로 데이터가 추가 또는 변경되면 kafka connector가 이를 인지하여 kafka topic으로 전달한다. topic에 전달된 데이터는 nodejs 연계 모듈내에 subscribe 기능을 구현하여 타겟 서버로 업데이트 한다. 
 
 주요 키워드
 - nodejs : 배치 에이전트 모듈
