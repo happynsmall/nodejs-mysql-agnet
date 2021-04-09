@@ -43,3 +43,9 @@ kubectl -n lab99 exec -ti \
     --topic k8s-connect-user05-md_goods_bas --from-beginning
 
 ```
+
+## kafka 연계 배치 로그 확인
+
+```
+k logs -f nodejs-mysql-agent-0 -n nsmall
+```
