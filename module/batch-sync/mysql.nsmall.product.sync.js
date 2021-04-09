@@ -17,7 +17,7 @@ const main = {
         var goodsPrice = data.GOODS_PRICE;
 
         // todo : 쿼리 매핑 수정해야함, 순서 주의.
-        connection.query(query, [goodsNm,goodsImg, goodsPrice, goodsCd,], (error, rows) => {
+        connection.query(query, [goodsNm,goodsImg, goodsPrice, goodsCd], (error, rows) => {
             console.log("업데이트 성공 : " + goodsCd);
             if (error) throw error;
 
