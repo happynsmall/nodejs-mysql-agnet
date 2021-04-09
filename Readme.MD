@@ -34,4 +34,12 @@ CREATE TABLE `md_goods_bas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 ```
 
+## kafka topic monitoring
+su - jhchoi 로 변경 후 아래 스크립트 수행
+```
+kubectl -n lab99 exec -ti \
+    kafka-client -- /usr/bin/kafka-console-consumer \
+    --bootstrap-server confluent-cp-kafka-headless:9092 \
+    --topic k8s-connect-user05-md_goods_bas --from-beginning
 
+```
